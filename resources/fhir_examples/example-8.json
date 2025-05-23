@@ -1,0 +1,211 @@
+{
+  "resourceType": "Bundle",
+  "type": "Collection",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "patient-sarah-jones",
+        "identifier": [
+          {
+            "system": "http://hospital.example.org",
+            "value": "78943"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Jones",
+            "given": ["Sarah"]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1967-11-23"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Condition",
+        "id": "rheumatoid-arthritis-sarah",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "64572001",
+                "display": "Disease"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "69896004",
+              "display": "Rheumatoid arthritis"
+            }
+          ],
+          "text": "Rheumatoid arthritis"
+        },
+        "subject": {
+          "reference": "Patient/patient-sarah-jones"
+        },
+        "onsetDateTime": "2019-03-15"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "crp-sarah-baseline",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "1988-5",
+              "display": "C-reactive protein [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "C-reactive protein"
+        },
+        "subject": {
+          "reference": "Patient/patient-sarah-jones"
+        },
+        "effectiveDateTime": "2023-01-10T08:15:00+01:00",
+        "valueQuantity": {
+          "value": 42.5,
+          "unit": "mg/L",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/L"
+        },
+        "note": [
+          {
+            "text": "Baseline measurement for disease activity monitoring"
+          }
+        ],
+        "partOf": [
+          {
+            "reference": "Procedure/ra-monitoring-sarah"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "crp-sarah-followup",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "1988-5",
+              "display": "C-reactive protein [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "C-reactive protein"
+        },
+        "subject": {
+          "reference": "Patient/patient-sarah-jones"
+        },
+        "effectiveDateTime": "2023-04-12T09:20:00+01:00",
+        "valueQuantity": {
+          "value": 28.3,
+          "unit": "mg/L",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/L"
+        },
+        "note": [
+          {
+            "text": "Follow-up measurement for disease activity monitoring"
+          }
+        ],
+        "partOf": [
+          {
+            "reference": "Procedure/ra-monitoring-sarah"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Procedure",
+        "id": "ra-monitoring-sarah",
+        "status": "completed",
+        "category": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "103693007",
+              "display": "Diagnostic procedure"
+            }
+          ],
+          "text": "Diagnostic procedure"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "268403002",
+              "display": "Monitoring of patient"
+            }
+          ],
+          "text": "Rheumatoid arthritis disease activity monitoring"
+        },
+        "subject": {
+          "reference": "Patient/patient-sarah-jones"
+        },
+        "performedPeriod": {
+          "start": "2023-01-10",
+          "end": "2023-04-12"
+        },
+        "reasonReference": [
+          {
+            "reference": "Condition/rheumatoid-arthritis-sarah"
+          }
+        ]
+      }
+    }
+  ]
+}

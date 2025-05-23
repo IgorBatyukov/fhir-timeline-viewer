@@ -1,0 +1,269 @@
+{
+  "resourceType": "Bundle",
+  "type": "Collection",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "patient-david-brown",
+        "identifier": [
+          {
+            "system": "http://hospital.example.org",
+            "value": "45678"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Brown",
+            "given": ["David"]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1968-05-10"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Procedure",
+        "id": "colonoscopy-david",
+        "status": "completed",
+        "category": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "103693007",
+              "display": "Diagnostic procedure"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "73761001",
+              "display": "Colonoscopy"
+            }
+          ],
+          "text": "Screening colonoscopy"
+        },
+        "subject": {
+          "reference": "Patient/patient-david-brown"
+        },
+        "performedDateTime": "2023-06-15T08:30:00+01:00",
+        "reasonCode": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "268543007",
+                "display": "Screening for malignant neoplasm of colon"
+              }
+            ],
+            "text": "Routine colorectal cancer screening"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "polyp-observation-david",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "procedure",
+                "display": "Procedure"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "32207-3",
+              "display": "Colon Polyp presence"
+            }
+          ],
+          "text": "Colon Polyp finding"
+        },
+        "subject": {
+          "reference": "Patient/patient-david-brown"
+        },
+        "effectiveDateTime": "2023-06-15T09:15:00+01:00",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "268910001",
+              "display": "Patient's condition improved"
+            }
+          ],
+          "text": "Small adenomatous polyp found and removed"
+        },
+        "bodySite": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "32713005",
+              "display": "Sigmoid colon structure"
+            }
+          ],
+          "text": "Sigmoid colon"
+        },
+        "method": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "173418000",
+              "display": "Colonoscopic polypectomy"
+            }
+          ]
+        },
+        "partOf": [
+          {
+            "reference": "Procedure/colonoscopy-david"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "colonoscopy-report-david",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+                "code": "SP",
+                "display": "Surgical Pathology"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "18746-8",
+              "display": "Colonoscopy study"
+            }
+          ],
+          "text": "Colonoscopy with polyp removal"
+        },
+        "subject": {
+          "reference": "Patient/patient-david-brown"
+        },
+        "effectiveDateTime": "2023-06-15T08:30:00+01:00",
+        "issued": "2023-06-16T14:30:10+01:00",
+        "result": [
+          {
+            "reference": "Observation/polyp-observation-david"
+          }
+        ],
+        "conclusion": "Small (4mm) adenomatous polyp removed from sigmoid colon. No other abnormalities. Recommend repeat colonoscopy in 5 years.",
+        "presentedForm": [
+          {
+            "contentType": "text/plain",
+            "language": "en-US",
+            "title": "Colonoscopy Procedure Report"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "pathology-polyp-david",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory",
+                "display": "Laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "22637-3",
+              "display": "Pathology report diagnosis"
+            }
+          ],
+          "text": "Pathology diagnosis of colon polyp"
+        },
+        "subject": {
+          "reference": "Patient/patient-david-brown"
+        },
+        "effectiveDateTime": "2023-06-16T12:00:00+01:00",
+        "valueCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "62047007",
+              "display": "Tubular adenoma of colon"
+            }
+          ],
+          "text": "Tubular adenoma, low-grade dysplasia"
+        },
+        "specimen": {
+          "reference": "Specimen/polyp-specimen-david"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Specimen",
+        "id": "polyp-specimen-david",
+        "status": "available",
+        "type": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "119376003",
+              "display": "Tissue specimen from colon"
+            }
+          ],
+          "text": "Colon polyp specimen"
+        },
+        "subject": {
+          "reference": "Patient/patient-david-brown"
+        },
+        "receivedTime": "2023-06-15T11:30:00+01:00",
+        "collection": {
+          "collectedDateTime": "2023-06-15T09:15:00+01:00",
+          "method": {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "65801008",
+                "display": "Excision"
+              }
+            ],
+            "text": "Polypectomy"
+          },
+          "bodySite": {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "32713005",
+                "display": "Sigmoid colon structure"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

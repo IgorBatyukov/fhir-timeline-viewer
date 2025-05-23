@@ -1,4 +1,6 @@
 (ns fhir-timeline-viewer.subs
+  "Re-frame subscriptions for the application.
+ Provides access to application state for UI components."
   (:require [re-frame.core :as rf]))
 
 (rf/reg-sub

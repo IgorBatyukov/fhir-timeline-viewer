@@ -10,7 +10,9 @@
                    {:adapter (next-jdbc-adapter/hugsql-adapter-next-jdbc)})
 
 
-(defn assoc-response [ctx status body]
+(defn assoc-response
+  "Helper function to associate an HTTP response map with a context."
+  [ctx status body]
   (assoc ctx :response {:status status
                         :body body}))
 
@@ -27,19 +29,24 @@
         (assoc-response ctx 500 {:error "Internal server error"})))))
 
 
-(defn ctx->deps-params [ctx]
+(defn ctx->deps-params
+  "Extracts dependencies and path parameters from a context map."
+  [ctx]
   {:params (-> ctx :request :path-params)
    :datasource (-> ctx :dependencies :datasource)})
 
 
-(defn read-jsonb-object [obj]
-  (when obj
-    (some-> obj
-            (.getValue)
-            (cc/parse-string true))))
+(defn read-jsonb-object
+  "Parses a JSONB database object into a Clojure data structure."
+  [obj]
+  (some-> obj
+          (.getValue)
+          (cc/parse-string true)))
 
 
-(defn index [_]
+(defn index
+  "Handler for the application root path.\n   Serves the main HTML page of the application."
+  [_]
   (if-let [resource (io/resource "public/index.html")]
     {:status 200
      :headers {"Content-Security-Policy" "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'"
@@ -50,12 +57,17 @@
 
 
 (def health-check
+  "Interceptor for health check endpoint.
+   Returns a 200 OK response to indicate the application is running."
   {:name :health-check
    :enter (fn [ctx]
             (assoc-response ctx 200 {:status "OK"}))})
 
 
-(defn fhir-resource->response [resource]
+(defn fhir-resource->response
+  "Transforms a FHIR resource from database format to response format.
+  Parses JSONB fields and formats resource type."
+  [resource]
   (when resource
     (assoc resource
       :resource_type (str/capitalize (:resource_type resource))
@@ -63,7 +75,9 @@
       :value_quantity (read-jsonb-object (:value_quantity resource)))))
 
 
-(defn get-timeline [ctx]
+(defn get-timeline
+  "Handler function for retrieving the timeline of FHIR resources."
+  [ctx]
   (let [{:keys [datasource params]} (ctx->deps-params ctx)
         db-response (->> (get-fhir-timeline (datasource) params)
                          (keep fhir-resource->response))]
@@ -71,7 +85,9 @@
                              :total (count db-response)})))
 
 
-(defn get-resource [ctx]
+(defn get-resource
+  "Handler function for retrieving a specific FHIR resource by ID."
+  [ctx]
   (let [{:keys [datasource params]} (ctx->deps-params ctx)
         resource (get-resource-by-id (datasource) params)
         response (fhir-resource->response resource)]
@@ -81,10 +97,15 @@
 
 
 (def timeline
+  "Interceptor for the timeline endpoint.
+ Wraps the get-timeline handler with error handling."
   {:name :timeline
    :enter (with-error-handling get-timeline)})
 
 
 (def resource
+  "Interceptor for the resource endpoint.
+ Wraps the get-resource handler with error handling."
+
   {:name :resource
    :enter (with-error-handling get-resource)})

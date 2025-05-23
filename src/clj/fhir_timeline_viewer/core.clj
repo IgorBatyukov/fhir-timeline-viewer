@@ -7,7 +7,16 @@
   (:import com.zaxxer.hikari.HikariDataSource
            (org.flywaydb.core Flyway)))
 
-(defn api-system [config]
+(defn api-system
+  "Creates a component system for the application.
+   Sets up the database connection pool and web server components.
+
+   Parameters:
+   - config: A map containing application configuration
+
+   Returns:
+   - A component system map containing all application components"
+  [config]
   (component/system-map
     :datasource (connection/component
                   HikariDataSource

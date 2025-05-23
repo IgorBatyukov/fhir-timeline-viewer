@@ -5,7 +5,10 @@
             [re-frame.core :as rf]
             [reagent.core :as r]))
 
-(defn detail-view-display [item]
+(defn detail-view-display
+  "Renders the detailed view of a FHIR resource item.
+ Displays comprehensive information about the selected resource"
+  [item]
   [:div.detail-panel
    [:div.detail-header
     [:h2 (:resource_type item)]
@@ -44,7 +47,9 @@
         [:span (:value quantity) " " (:unit quantity)]]])]])
 
 
-(defn detail-view-container []
+(defn detail-view-container
+  "Container component for the detail view."
+  []
   (let [item            @(rf/subscribe [::subs/selected-item])
         loading-detail? @(rf/subscribe [::subs/loading-detail?])
         detail-error    @(rf/subscribe [::subs/item-detail-error])]
@@ -61,7 +66,10 @@
        :else [:div.empty "No item selected or details not found."])]))
 
 
-(defn timeline-item [item]
+(defn timeline-item
+  "Renders a single timeline item as a clickable card.
+ Displays summary information about a FHIR resource."
+  [item]
   [:div.timeline-item.clickable
    {:on-click #(rf/dispatch [::events/select-item (:id item)])}
    [:h3 "Resource type: " (:resource_type item)]
@@ -76,7 +84,11 @@
       [:p "Value: " (:value quantity) " " (:unit quantity)]])])
 
 
-(defn maybe-scroll-and-clear [scroll-pos-sub]
+(defn maybe-scroll-and-clear
+  "Scrolls the page to a previously saved position if available.
+ Used to restore scroll position when returning to the timeline view.
+ Clears the saved position after scrolling."
+  [scroll-pos-sub]
   (let [scroll-pos @scroll-pos-sub]
     (when (some? scroll-pos)
       (js/setTimeout
@@ -87,15 +99,14 @@
         0))))
 
 
-(defn render-timeline-list-contents []
+(defn render-timeline-list-contents
+  "Renders the timeline list contents based on the current application state."
+  []
   (let [items    @(rf/subscribe [::subs/timeline-items])
         loading? @(rf/subscribe [::subs/loading?])
         error    @(rf/subscribe [::subs/error])]
     [:div.timeline-container
      [:h2 "FHIR Timeline"]
-     [:button.fetch-btn
-      {:on-click #(rf/dispatch [::events/fetch-timeline])}
-      "Fetch Timeline Data"]
      (cond
        loading? [:div.loading "Loading..."]
        error [:div.error "Error loading timeline: " (str error)]
@@ -106,7 +117,9 @@
        :else [:div.empty "No timeline items found."])]))
 
 
-(defn timeline-list []
+(defn timeline-list
+  "Component for displaying the list of timeline items."
+  []
   (let [scroll-pos-sub (rf/subscribe [::subs/timeline-scroll-position])]
     (r/create-class
       {:component-did-mount (fn [] (maybe-scroll-and-clear scroll-pos-sub))
@@ -115,7 +128,10 @@
        :reagent-render (fn [] [render-timeline-list-contents])})))
 
 
-(defn main-panel []
+(defn main-panel
+  "The main application panel that conditionally renders either the timeline list
+ or the detail view based on whether an item is selected."
+  []
   (let [selected-item-id @(rf/subscribe [::subs/selected-item-id])]
     [:div.main
      [:h1 "FHIR Timeline Viewer"]

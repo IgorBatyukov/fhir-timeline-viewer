@@ -8,8 +8,8 @@
     [clojure.tools.namespace.repl :refer [refresh]]
     [com.stuartsierra.component :as component]
     [fhir-timeline-viewer.config :as config]
-    [hugsql.core :as hugsql]
-    [fhir-timeline-viewer.core :as app]))
+    [fhir-timeline-viewer.core :as app]
+    [hugsql.core :as hugsql]))
 
 (def system nil)
 
@@ -47,15 +47,17 @@
     (json/read-str (slurp rdr))))
 
 (defn entry->payload [entry]
-  (let [resource (get entry "resource")]
-    {:resource-type (str/lower-case (get resource "resourceType"))
-     :resource-id (get resource "id")
-     :patient-id (-> resource
-                     (get "subject")
-                     (get "reference")
-                     (str/split #"/")
-                     (last))
-     :content (json/write-str resource)}))
+  (let [resource      (get entry "resource")
+        resource-type (str/lower-case (get resource "resourceType"))]
+    (when (contains? #{"observation" "condition"} resource-type)
+      {:resource-type resource-type
+       :resource-id (get resource "id")
+       :patient-id (-> resource
+                       (get "subject")
+                       (get "reference")
+                       (str/split #"/")
+                       (last))
+       :content (json/write-str resource)})))
 
 (defn get-jsons []
   (->> (io/resource "fhir_examples")
@@ -66,7 +68,7 @@
   (let [payloads (->> (get-jsons)
                       (map read-json)
                       (mapcat #(get % "entry"))
-                      (map entry->payload))]
+                      (keep entry->payload))]
     (loop [p payloads]
       (when (seq p)
         (do

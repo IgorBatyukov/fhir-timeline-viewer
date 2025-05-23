@@ -26,6 +26,8 @@ SELECT
     content ->> 'status' AS resource_status,
     content -> 'code' ->> 'text' AS code_text,
     content ->> 'effectiveDateTime' AS effective_dt,
-    content -> 'valueQuantity' AS value_quantity
+    content -> 'valueQuantity' AS value_quantity,
+    content ->> 'onsetDateTime' AS onset_dt,
+    content ->> 'recordedDate' AS recorded_dt
 FROM fhir_resources
 WHERE id = :id::integer

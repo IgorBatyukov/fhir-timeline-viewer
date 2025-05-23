@@ -23,7 +23,13 @@
     [:div.detail-row
      [:strong "Patient ID: "] [:span (:patient_id item)]]
     [:div.detail-row
-     [:strong "Date: "] [:span (:effective_dt item)]]
+     [:strong "Clinical data collected: "] [:span (:effective_dt item)]]
+    (when (= (:resource_type item) "Condition")
+      [:div
+        [:div.detail-row
+         [:strong "Condition recognized: "] [:span (:onset_dt item)]]
+        [:div.detail-row
+         [:strong "First recorded in the system: "] [:span (:recorded_dt item)]]])
     (when-let [status (:resource_status item)]
       [:div.detail-row
        [:strong "Status: "] [:span status]])
@@ -33,7 +39,7 @@
     (when-let [code (:code_text item)]
       [:div.detail-row
        [:strong "Code: "] [:span code]])
-    (when-let [categories (:categories item)]
+    (when-let [categories (seq (:categories item))]
       [:div.detail-section
        [:h3 "Categories"]
        [:ul.detail-list

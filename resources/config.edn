@@ -1,0 +1,14 @@
+{:server {:port #long #or [#env SERVER_PORT 8080]}
+ :db-spec {:jdbcUrl #or [#env JDBC_URL
+                         #join ["jdbc:postgresql://"
+                                #or [#env DB_HOST "localhost"] ":"
+                                #or [#env DB_PORT "5432"] "/"
+                                #or [#env DB_NAME "postgres"]]]
+           :username #or [#env DB_USER "postgres"]
+           :password #or [#env DB_PASSWORD "postgres"]
+           :connection-timeout 30000
+           :idle-timeout 600000
+           :max-lifetime 1800000
+           :minimum-idle 5
+           :maximum-pool-size 10
+           :pool-name "app-pool"}}

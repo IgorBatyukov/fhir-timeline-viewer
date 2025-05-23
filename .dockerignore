@@ -1,0 +1,11 @@
+node_modules
+dev
+resources/fhir_examples
+resources/public/js
+logs
+npm-debug.log
+build
+.env*
+.gitignore
+
+docker-volumes
